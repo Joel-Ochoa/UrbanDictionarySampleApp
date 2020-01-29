@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/normal_padding">
+
+    <View
+        android:id="@+id/horizontal_separator"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/line_size"
+        android:layout_marginBottom="@dimen/margin_large"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/word"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/colorPrimary"
+        />
+
+    <TextView
+        android:id="@+id/word"
+        style="@style/HeaderTextStyle"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_separator"
+        app:layout_constraintBottom_toTopOf="@id/definition"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/dummy_header" />
+
+    <TextView
+        android:id="@+id/definition"
+        style="@style/ContentTextStyle"
+        app:layout_constraintTop_toBottomOf="@id/word"
+        app:layout_constraintBottom_toTopOf="@id/example"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/dummy_content" />
+
+    <TextView
+        android:id="@+id/example"
+        style="@style/ContentTextStyle"
+        app:layout_constraintTop_toBottomOf="@id/definition"
+        app:layout_constraintBottom_toTopOf="@id/author"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/dummy_example" />
+
+    <TextView
+        android:id="@+id/author"
+        style="@style/ContentTextStyle"
+        app:layout_constraintTop_toBottomOf="@id/example"
+        app:layout_constraintBottom_toTopOf="@id/thumbs_up"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/dummy_author" />
+
+    <TextView
+        android:id="@+id/thumbs_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/content_size"
+        android:drawableStart="@drawable/ic_thumbs_up"
+        android:layout_marginTop="@dimen/margin_normal"
+        app:layout_constraintTop_toBottomOf="@id/author"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/thumbs_down"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        tools:text="@string/dummy_thumbs_up" />
+
+    <TextView
+        android:id="@+id/thumbs_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/content_size"
+        android:drawableStart="@drawable/ic_thumbs_down"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_marginStart="@dimen/margin_small"
+        app:layout_constraintTop_toBottomOf="@id/author"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/thumbs_up"
+        tools:text="@string/dummy_thumbs_down" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
