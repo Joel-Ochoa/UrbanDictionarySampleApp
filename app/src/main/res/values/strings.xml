@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">UrbanDictionarySampleApp</string>
+    <string name="single_text">%1$s</string>
+    <string name="author_date">by %1$s %2$s</string>
+    <string name="hint">Search</string>
+    <string name="dummy_header">LOL</string>
+    <string name="dummy_content">It\'s original definition was \"Laughing out loud\" (also written occasionally as \"Lots of Laughs\"), used as a brief acronym to denote great amusement in chat conversations.</string>
+    <string name="dummy_example">(texting) mom : your father tripped over a stick and fell at the park. \n son: lol</string>
+    <string name="dummy_author">John Smith</string>
+    <string name="dummy_date">01/25/2020</string>
+    <string name="dummy_thumbs_up">150</string>
+    <string name="dummy_thumbs_down">32</string>
+    <string name="retry">Retry</string>
+    <string name="generic_error_message">Something went wrong</string>
+    <string name="filter_by_thumbs_up">Filter by Thumbs Up</string>
+    <string name="filter_by_thumbs_down">Filter by Thumbs Down</string>
+
+</resources>
