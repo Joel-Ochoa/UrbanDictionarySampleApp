@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.urbandictionarysampleapp.R
 import com.example.urbandictionarysampleapp.model.Definition
-import com.example.urbandictionarysampleapp.model.DefinitionResponse
 import com.example.urbandictionarysampleapp.view.adapter.DefinitionAdapter
 import com.example.urbandictionarysampleapp.viewmodel.DefinitionViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,13 +19,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     private lateinit var definitionViewModel: DefinitionViewModel
-    private var definitionAdapter: DefinitionAdapter? = null
-    private lateinit var definitionsList: List<Definition>
+    private lateinit var definitionAdapter: DefinitionAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         definitionViewModel = ViewModelProviders.of(this).get(DefinitionViewModel::class.java)
+        setupRecyclerView()
         setupSearchListener()
     }
 
@@ -37,23 +37,17 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val sortedList: List<Definition>
-        if (::definitionsList.isInitialized) {
-            return when (item.itemId) {
-                R.id.action_thumbs_up -> {
-                    sortedList = definitionViewModel.sortThumbsUp(definitionsList)
-                    setupRecyclerView(sortedList)
-                    return true
-                }
-                R.id.action_thumbs_down -> {
-                    sortedList = definitionViewModel.sortThumbsDown(definitionsList)
-                    setupRecyclerView(sortedList)
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_thumbs_up -> {
+                definitionViewModel.sortThumbsUp()
+                return true
             }
+            R.id.action_thumbs_down -> {
+                definitionViewModel.sortThumbsDown()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return false
     }
 
     /**
@@ -81,20 +75,17 @@ class MainActivity : BaseActivity() {
     private fun loadData(term: String) {
         hideSoftKeyboard()
         showLoadingBar()
-        definitionsList = ArrayList()
-        definitionViewModel.fetchData(term)
-        definitionViewModel.getDefinitionRepository()
-            .observe(this, Observer { definitionResponse: DefinitionResponse ->
-                dismissLoadingBar()
-                definitionsList = definitionResponse.list
-                setupRecyclerView(definitionsList)
-            })
-
+        definitionViewModel.updateList(term)
     }
 
-    private fun setupRecyclerView(definitionsList: List<Definition>) {
-        definitionAdapter = DefinitionAdapter(definitionsList)
+    private fun setupRecyclerView() {
+        definitionAdapter = DefinitionAdapter(listOf())
         definition_list.adapter = definitionAdapter
         definition_list.layoutManager = LinearLayoutManager(this)
+        definitionViewModel.definitionsList
+            .observe(this, Observer { definitions: List<Definition> ->
+                dismissLoadingBar()
+                definitionAdapter.update(definitions)
+            })
     }
 }

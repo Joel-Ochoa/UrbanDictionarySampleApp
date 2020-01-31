@@ -1,32 +1,40 @@
 package com.example.urbandictionarysampleapp.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.urbandictionarysampleapp.model.Definition
 import com.example.urbandictionarysampleapp.model.DefinitionResponse
 import com.example.urbandictionarysampleapp.networking.DefinitionRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
-class DefinitionViewModel : ViewModel() {
+class DefinitionViewModel : ViewModel(), Callback<DefinitionResponse> {
 
-    private var mutableLiveData: MutableLiveData<DefinitionResponse>? = null
-    private lateinit var definitionRepository: DefinitionRepository
+    val definitionsList: MutableLiveData<List<Definition>> = MutableLiveData()
+    private val definitionRepository: DefinitionRepository = DefinitionRepository.instance()
 
-    fun fetchData(term: String) {
-        definitionRepository = DefinitionRepository.instance()
-        updateList(term)
+    fun updateList(term: String) {
+        definitionRepository.getDefinitions(term, this)
     }
 
-    private fun updateList(term: String) {
-        mutableLiveData = definitionRepository.getDefinitions(term)
-
+    fun sortThumbsUp() {
+        definitionsList.value = definitionsList.value?.sortedBy { it.thumbsUp }?.reversed()
     }
 
-    fun getDefinitionRepository(): LiveData<DefinitionResponse> = mutableLiveData!!
+    fun sortThumbsDown() {
+        definitionsList.value = definitionsList.value?.sortedBy { it.thumbsDown }?.reversed()
+    }
 
-    fun sortThumbsUp(definitionsList: List<Definition>): List<Definition> = definitionsList.sortedBy { it.thumbsUp }.reversed()
+    override fun onFailure(call: Call<DefinitionResponse>, t: Throwable) {
+        definitionsList.value = listOf()
+    }
 
-    fun sortThumbsDown(definitionsList: List<Definition>): List<Definition> = definitionsList.sortedBy { it.thumbsDown }.reversed()
-
+    override fun onResponse(
+        call: Call<DefinitionResponse>,
+        response: Response<DefinitionResponse>
+    ) {
+        definitionsList.value = response.body()?.list
+    }
 }

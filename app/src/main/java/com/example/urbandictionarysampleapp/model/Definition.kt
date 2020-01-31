@@ -51,14 +51,5 @@ class Definition {
         this.permalink = permalink
         this.currentVote = currentVote
         this.date = date
-//        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
-//        try {
-//            val formattedDate = dateFormat.parse(date)
-//            this.date = formattedDate?.toString()
-//
-//        } catch (e: ParseException) {
-//            e.printStackTrace()
-//        }
-
     }
 }
