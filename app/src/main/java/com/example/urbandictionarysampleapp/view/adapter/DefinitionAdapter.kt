@@ -10,17 +10,14 @@ import kotlinx.android.synthetic.main.definition_item.view.*
 
 class DefinitionAdapter(private val definitionList: List<Definition>) :
     RecyclerView.Adapter<DefinitionAdapter.CustomViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.definition_item, parent, false)
-        return CustomViewHolder(
-            view
-        )
+        return CustomViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.bind(definitionList[position])
-    }
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) = holder.bind(definitionList[position])
 
     override fun getItemCount(): Int = definitionList.size
 

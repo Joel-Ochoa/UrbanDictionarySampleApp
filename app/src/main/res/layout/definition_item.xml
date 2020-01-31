@@ -26,6 +26,7 @@
         app:layout_constraintBottom_toTopOf="@id/definition"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:textAllCaps="true"
         tools:text="@string/dummy_header" />
 
     <TextView
