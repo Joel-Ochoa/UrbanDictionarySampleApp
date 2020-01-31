@@ -2,9 +2,6 @@ package com.example.urbandictionarysampleapp.networking
 
 import androidx.lifecycle.MutableLiveData
 import com.example.urbandictionarysampleapp.model.DefinitionResponse
-import com.example.urbandictionarysampleapp.utils.ERROR
-import com.example.urbandictionarysampleapp.utils.ResponseStatus
-import com.example.urbandictionarysampleapp.utils.SUCCESS
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,7 +9,6 @@ import retrofit2.Response
 class DefinitionRepository {
 
     private var definitionAPI: DefinitionAPI = RetrofitClientInstance.createService(DefinitionAPI::class.java)
-
 
     fun getDefinitions(term: String): MutableLiveData<DefinitionResponse> {
         val definitionData = MutableLiveData<DefinitionResponse>()

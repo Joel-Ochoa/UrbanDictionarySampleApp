@@ -1,12 +1,10 @@
 package com.example.urbandictionarysampleapp
 
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressImeActionButton
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.example.urbandictionarysampleapp.view.MainActivity
@@ -22,25 +20,24 @@ class MainActivityInstrumentedTest {
 
     private lateinit var search: String
 
-    @Rule
+    @get:Rule
     var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     @Before
     fun initValidString() {
-        // Specify a valid string.
         search = "wat"
     }
 
+    /**
+     * Types the search keyword in the EditView, then it press search in the keyboard and wait for 5 seconds.
+     * Checks if the RecyclerView was populated with the search parameter
+     */
     @Test
-    fun changeText_sameActivity() {
-        // Type text and then press the button.
-        onView(withId(R.id.search))
-            .perform(typeText(search), closeSoftKeyboard())
-        onView(withId(R.id.changeTextBt)).perform(click())
-
-        // Check that the text was changed.
-        onView(withId(R.id.textToBeChanged))
-            .check(matches(withText(stringToBetyped)))
+    fun checkRecyclerViewIsPopulated() {
+        onView(withId(R.id.search)).perform(typeText(search))
+        onView(withId(R.id.search)).perform(pressImeActionButton())
+        Thread.sleep(5000)
+        onView(withId(R.id.definition_list)).check(matches(hasDescendant(withText(search))))
     }
 }
 

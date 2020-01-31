@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat
 
 class Definition {
 
-
     @SerializedName("defid")
     var id: Int? = null
     @SerializedName("word")

@@ -1,6 +1,5 @@
 package com.example.urbandictionarysampleapp.viewmodel
 
-import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,21 +15,12 @@ class DefinitionViewModel : ViewModel() {
 
     fun fetchData(term: String) {
         definitionRepository = DefinitionRepository.instance()
-
         updateList(term)
     }
 
-    fun updateList(term: String) {
+    private fun updateList(term: String) {
         mutableLiveData = definitionRepository.getDefinitions(term)
 
-        addDelay()
-    }
-
-    private fun addDelay() {
-        val handler = Handler()
-        handler.postDelayed({
-            // Do something after 5s = 5000ms
-        }, 1000)
     }
 
     fun getDefinitionRepository(): LiveData<DefinitionResponse> = mutableLiveData!!

@@ -4,25 +4,20 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.urbandictionarysampleapp.model.Definition
-import com.example.urbandictionarysampleapp.viewmodel.DefinitionViewModel
 import com.example.urbandictionarysampleapp.R
+import com.example.urbandictionarysampleapp.model.Definition
 import com.example.urbandictionarysampleapp.model.DefinitionResponse
-import com.example.urbandictionarysampleapp.utils.ResponseStatus
-import com.example.urbandictionarysampleapp.utils.SUCCESS
 import com.example.urbandictionarysampleapp.view.adapter.DefinitionAdapter
+import com.example.urbandictionarysampleapp.viewmodel.DefinitionViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var definitionViewModel: DefinitionViewModel
     private var definitionAdapter: DefinitionAdapter? = null
@@ -85,10 +80,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData(term: String) {
         hideSoftKeyboard()
+        showLoadingBar()
         definitionsList = ArrayList()
         definitionViewModel.fetchData(term)
         definitionViewModel.getDefinitionRepository()
             .observe(this, Observer { definitionResponse: DefinitionResponse ->
+                dismissLoadingBar()
                 definitionsList = definitionResponse.list
                 setupRecyclerView(definitionsList)
             })
@@ -101,5 +98,3 @@ class MainActivity : AppCompatActivity() {
         definition_list.layoutManager = LinearLayoutManager(this)
     }
 }
-
-
