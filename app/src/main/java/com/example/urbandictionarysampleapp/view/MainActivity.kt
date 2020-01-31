@@ -4,30 +4,23 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.urbandictionarysampleapp.model.Definition
-import com.example.urbandictionarysampleapp.viewmodel.DefinitionViewModel
 import com.example.urbandictionarysampleapp.R
+import com.example.urbandictionarysampleapp.model.Definition
 import com.example.urbandictionarysampleapp.model.DefinitionResponse
-import com.example.urbandictionarysampleapp.networking.GetDataService
-import com.example.urbandictionarysampleapp.networking.RetrofitClientInstance
 import com.example.urbandictionarysampleapp.view.adapter.DefinitionAdapter
-import com.google.android.material.snackbar.Snackbar
+import com.example.urbandictionarysampleapp.viewmodel.DefinitionViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var definitionViewModel: DefinitionViewModel
-    private lateinit var definitionAdapter: DefinitionAdapter
+    private var definitionAdapter: DefinitionAdapter? = null
     private lateinit var definitionsList: List<Definition>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    //TODO: handle click before search
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val sortedList: List<Definition>
         if (::definitionsList.isInitialized) {
@@ -74,8 +66,7 @@ class MainActivity : AppCompatActivity() {
             if (isEnterPressed) {
                 loadData(search.text.toString())
                 true
-            }
-            else false
+            } else false
         }
     }
 
@@ -87,43 +78,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadData(search: String) {
-        val service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService::class.java)
-        val call: Call<DefinitionResponse> = service.getDefinitions(search)
-        progress_circular.visibility = View.VISIBLE
+    private fun loadData(term: String) {
         hideSoftKeyboard()
-        call.enqueue(object : Callback<DefinitionResponse> {
+        showLoadingBar()
+        definitionsList = ArrayList()
+        definitionViewModel.fetchData(term)
+        definitionViewModel.getDefinitionRepository()
+            .observe(this, Observer { definitionResponse: DefinitionResponse ->
+                dismissLoadingBar()
+                definitionsList = definitionResponse.list
+                setupRecyclerView(definitionsList)
+            })
 
-            override fun onResponse(call: Call<DefinitionResponse>, response: Response<DefinitionResponse>) {
-                progress_circular.visibility = View.GONE
-                response.body()?.let {
-                    definitionsList = it.list
-                    setupRecyclerView(definitionsList) }
-            }
-
-            override fun onFailure(call: Call<DefinitionResponse>, t: Throwable) {
-                progress_circular.visibility = View.GONE
-                showErrorBanner()
-            }
-        })
     }
 
     private fun setupRecyclerView(definitionsList: List<Definition>) {
         definitionAdapter = DefinitionAdapter(definitionsList)
         definition_list.adapter = definitionAdapter
         definition_list.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun showErrorBanner() {
-        val snackBar = Snackbar.make(
-            main_constraint_layout,
-            R.string.generic_error_message,
-            Snackbar.LENGTH_INDEFINITE
-        )
-        snackBar.show()
-        snackBar.setAction(R.string.retry) {
-            loadData(search.text.toString())
-            snackBar.dismiss()
-        }
     }
 }
