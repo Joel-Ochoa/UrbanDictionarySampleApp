@@ -8,7 +8,7 @@ import com.example.urbandictionarysampleapp.model.Definition
 import com.example.urbandictionarysampleapp.R
 import kotlinx.android.synthetic.main.definition_item.view.*
 
-class DefinitionAdapter(private val definitionList: List<Definition>) :
+class DefinitionAdapter(private var definitionList: List<Definition>) :
     RecyclerView.Adapter<DefinitionAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -20,6 +20,11 @@ class DefinitionAdapter(private val definitionList: List<Definition>) :
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) = holder.bind(definitionList[position])
 
     override fun getItemCount(): Int = definitionList.size
+
+    fun update(newList : List<Definition>) {
+        definitionList = newList
+        notifyDataSetChanged()
+    }
 
     class CustomViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
