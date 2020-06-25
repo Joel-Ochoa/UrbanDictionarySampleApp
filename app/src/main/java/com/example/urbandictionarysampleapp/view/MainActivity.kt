@@ -79,7 +79,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupRecyclerView() {
-        definitionAdapter = DefinitionAdapter(listOf())
+        definitionAdapter = DefinitionAdapter()
         definition_list.adapter = definitionAdapter
         definition_list.layoutManager = LinearLayoutManager(this)
         definitionViewModel.definitionsList

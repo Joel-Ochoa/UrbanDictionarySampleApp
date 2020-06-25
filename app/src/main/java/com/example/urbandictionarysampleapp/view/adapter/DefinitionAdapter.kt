@@ -8,9 +8,9 @@ import com.example.urbandictionarysampleapp.model.Definition
 import com.example.urbandictionarysampleapp.R
 import kotlinx.android.synthetic.main.definition_item.view.*
 
-class DefinitionAdapter(private var definitionList: List<Definition>) :
-    RecyclerView.Adapter<DefinitionAdapter.CustomViewHolder>() {
+class DefinitionAdapter : RecyclerView.Adapter<DefinitionAdapter.CustomViewHolder>() {
 
+    private var definitionList = listOf<Definition>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.definition_item, parent, false)
